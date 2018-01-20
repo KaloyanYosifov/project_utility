@@ -7,7 +7,8 @@
 
 #### `crb_add_social( $social_name, $arrr )` or `crb_add_socials( $arr )`
 The first function you set the social name and add an array of arguments like
-```array(
+```
+array(
 	'public_name' => ('name of the social that is going to be shown in Theme Options'),
 	('icon' or 'image') => (the icon class or image id, or image url ),
 )```
