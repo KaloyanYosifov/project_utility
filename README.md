@@ -11,10 +11,11 @@ The first function you set the social name and add an array of arguments like
 array(
 	'public_name' => ('name of the social that is going to be shown in Theme Options'),
 	('icon' or 'image') => (the icon class or image id, or image url ),
-)```
+)
+```
 
 Theese are the required arguments for add socials and add social
-The second function you add associative array with social names\
+The second function you add associative array with social names
 ```
 array(
 	( The social name ) => array(
