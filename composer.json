@@ -15,11 +15,10 @@
     "require": {
         "php": ">=5.3.0"
     },
-      "autoload": {
+    "autoload": {
         "classmap": [
-          "core/crb-utility.php",
+          "core/crb-utility.php"
         ]
-      }
     },
      "require-dev": {
         "htmlburger/carbon-fields": "2.1.1"
