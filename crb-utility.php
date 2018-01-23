@@ -122,6 +122,7 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 			'render_icons' => true,
 			'render_images' => false,
 			'image_size' => 'thumbnail',
+			'target' => 'blank',
 		);
 
 		if ( ! empty( $args ) ) {
@@ -140,6 +141,11 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 					continue;
 				}
 			}
+			$target = '';
+			
+			if ( $render_args['target'] === 'blank' ) {
+				$target = 'target="_blank"';	
+			}
 
 			if ( $render_args['render_icons'] ) {
 				if ( empty( $social_data['icon'] ) ) {
@@ -149,7 +155,7 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 				$socials_render_html .= $render_args['item_wrapper_before'];
 
 				if ( ! empty( $social_data['url'] ) ) {
-					$socials_render_html .= '<a href="' . esc_url( $social_data['url'] ) . '">';
+					$socials_render_html .= '<a href="' . esc_url( $social_data['url'] ) . '" ' . $target . '>';
 				}
 
 				$socials_render_html .= '<i class="' . $social_data['icon'] . '"></i>';
@@ -187,7 +193,7 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 
 				$socials_render_html .= $render_args['item_wrapper_before'];
 				if ( ! empty( $social_data['url'] ) ) {
-					$socials_render_html .= '<a href="' . esc_url( $social_data['url'] ) . '">';
+					$socials_render_html .= '<a href="' . esc_url( $social_data['url'] ) . '" ' . $target . '>';
 				}
 
 				$socials_render_html .= $html;
