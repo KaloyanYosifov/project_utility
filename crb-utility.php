@@ -123,6 +123,7 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 			'render_images' => false,
 			'image_size' => 'thumbnail',
 			'target' => 'blank',
+			'reverse_order' => false,
 		);
 
 		if ( ! empty( $args ) ) {
@@ -132,6 +133,10 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 		$render_args = apply_filters( 'crb_pre_render_socials_args', $render_args );
 
 		$generated_socials = crb_get_socials();
+
+		if ( $render_args['reverse_order'] ) {
+			$generated_socials = array_reverse( $generated_socials );
+		}
 
 		$socials_render_html = $render_args['wrapper_before'];
 
@@ -165,6 +170,7 @@ if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 				}
 				$socials_render_html .= $render_args['item_wrapper_after'];
 			} elseif ( $render_args['render_images'] ) {
+
 				if ( empty( $social_data['image'] ) ) {
 					continue;
 				}
