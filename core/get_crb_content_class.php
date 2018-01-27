@@ -16,7 +16,7 @@ class CrbDuplicateCrbContent {
 
 		add_meta_box(
 			'crb-content-field',
-			__( 'Duplicate Content From Same Template', 'crb' ),
+			__( 'Copy Content', 'crb' ),
 			array(
 				&$this,
 				'front_end',
@@ -35,28 +35,44 @@ class CrbDuplicateCrbContent {
 
 		$table = $wpdb->postmeta;
 		$current_post_id = get_the_ID();
-		$sql = "SELECT meta_value FROM {$table} WHERE post_id = {$current_post_id} AND meta_key = '_wp_page_template'";
 
-		if ( empty( $meta_object = $wpdb->get_results( $sql )[0] ) ) {
-			$page_template = 'default';
-		}
+		if ( get_post_type() === 'page' ) {
+			$sql = "SELECT meta_value FROM {$table} WHERE post_id = {$current_post_id} AND meta_key = '_wp_page_template'";
 
-		if ( empty( $page_template ) ) {
-			if ( empty( $page_template = $meta_object->meta_value ) ) {
+			if ( empty( $meta_object = $wpdb->get_results( $sql )[0] ) ) {
 				$page_template = 'default';
 			}
+
+			if ( empty( $page_template ) ) {
+				if ( empty( $page_template = $meta_object->meta_value ) ) {
+					$page_template = 'default';
+				}
+			}
+
+			$sql = "SELECT post_id FROM {$table} WHERE post_id != {$current_post_id} AND meta_value = '{$page_template}'";
+
+			if ( empty( $post_id_results = $wpdb->get_results( $sql ) ) ) {
+				$post_id_results = array( );
+			}		
+		} else {
+			$post_type = get_post_type();
+			$table = $wpdb->posts;
+
+			$sql = "SELECT ID FROM {$table} WHERE post_type = '{$post_type}' AND ID != {$current_post_id} AND post_status = 'publish'";
+
+			if ( empty( $post_id_results = $wpdb->get_results( $sql ) ) ) {
+				$post_id_results = array();
+			}		
 		}
-
-		$sql = "SELECT post_id FROM {$table} WHERE post_id != {$current_post_id} AND meta_value = '{$page_template}'";
-
-		if ( empty( $post_id_results = $wpdb->get_results( $sql ) ) ) {
-			$post_id_results = array( );
-		}		
-
+		
 		$post_ids = array();
 
 		foreach ( $post_id_results as $post_id_result ) {
-			$post_ids[] = $post_id_result->post_id;
+			if ( get_post_type() === 'page' ) {
+				$post_ids[] = $post_id_result->post_id;
+			} else {
+				$post_ids[] = $post_id_result->ID;
+			}
 		}
 
 		$page_url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -109,7 +125,7 @@ class CrbDuplicateCrbContent {
 				</script>
 
 				<a href="<?php echo esc_url( $page_url ); ?>" id="crb-duplicate-btn" class="button button-primary button-large crb-duplicate__btn">
-					<?php _e( 'Duplicate Content', 'crb' ); ?>
+					<?php _e( 'Copy Content', 'crb' ); ?>
 				</a>
 			</div>
 		<?php
