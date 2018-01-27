@@ -38,17 +38,19 @@ class CrbDuplicateCrbContent {
 		$sql = "SELECT meta_value FROM {$table} WHERE post_id = {$post_id} AND meta_key = '_wp_page_template'";
 
 		if ( empty( $meta_object = $wpdb->get_results( $sql )[0] ) ) {
-			return;
+			$page_template = 'default';
 		}
 
-		if ( empty( $page_template = $meta_object->meta_value ) ) {
+		if ( empty( $page_template ) ) {
+			if ( empty( $page_template = $meta_object->meta_value ) ) {
 			$page_template = 'default';
+			}
 		}
 
 		$sql = "SELECT post_id FROM {$table} WHERE post_id != {$post_id} AND meta_value = '{$page_template}'";
 
 		if ( empty( $post_id_results = $wpdb->get_results( $sql ) ) ) {
-			return;
+			$post_id_results = array( 'There are no template siblings' );
 		}		
 
 		$post_ids = array();
