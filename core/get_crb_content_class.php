@@ -16,7 +16,7 @@ class CrbDuplicateCrbContent {
 
 		add_meta_box(
 			'crb-content-field',
-			__( 'Duplicate Carbon Fields Content', 'crb' ),
+			__( 'Duplicate Content From Same Template', 'crb' ),
 			array(
 				&$this,
 				'front_end',
@@ -107,7 +107,7 @@ class CrbDuplicateCrbContent {
 				</script>
 
 				<a href="<?php echo esc_url( $page_url ); ?>" id="crb-duplicate-btn" class="button button-primary button-large crb-duplicate__btn">
-					<?php _e( 'Duplicate Carbon Field Content', 'crb' ); ?>
+					<?php _e( 'Duplicate Content', 'crb' ); ?>
 				</a>
 			</div>
 		<?php
@@ -152,11 +152,25 @@ function crb_update_post_carbon_meta() {
 		return;
 	}
 
-
-	
 	wp_update_post( array(
 		'ID' => $current_post_id,
 		'post_content' => $post_data->post_content,
 	) );
+
+
+	$table = $wpdb->postmeta;
+	$sql = "SELECT meta_key, meta_value FROM {$table} WHERE post_id = {$duplicate_post_id} AND meta_key != '_edit_last' AND meta_key != '_edit_lock'";
+
+	if ( empty( $post_metadata = $wpdb->get_results( $sql ) ) ) {
+		return;
+	}
+
+	foreach ( $post_metadata as $meta_data ) {
+		if ( empty( $meta_data->meta_key ) ) {
+			continue;
+		}
+
+		update_post_meta( $current_post_id, $meta_data->meta_key, $meta_data->meta_value );
+	}
 
 }
