@@ -5,6 +5,10 @@ use Carbon_Fields\Field;
 if ( class_exists( '\Carbon_Fields\Carbon_Fields' ) ) {
 	global $crb_socials;
 
+	function crb_init_utility() {
+		include_once( 'get_crb_content_class.php' );
+	}
+
 	function crb_get_searched_page() {
 		if ( is_front_page() ) {
 			return '';
