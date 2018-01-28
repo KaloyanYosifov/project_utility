@@ -68,6 +68,12 @@ class CrbDuplicateCrbContent {
 		$post_ids = array();
 
 		foreach ( $post_id_results as $post_id_result ) {
+			if ( ! empty( $post_id_result->post_id ) ) {
+				if ( get_post_type( $post_id_result->post_id ) !== get_post_type() ) {
+					continue;
+				}
+			}
+			
 			if ( get_post_type() === 'page' ) {
 				$post_ids[] = $post_id_result->post_id;
 			} else {
