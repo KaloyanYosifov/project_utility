@@ -16,7 +16,7 @@ class CrbDuplicateCrbContent {
 
 		add_meta_box(
 			'crb-content-field',
-			__( 'Copy Content', 'crb' ),
+			__( 'Copy Content From Post', 'crb' ),
 			array(
 				&$this,
 				'front_end',
@@ -96,7 +96,7 @@ class CrbDuplicateCrbContent {
 					<?php endforeach; ?>
 				</select>
 
-				<p style="display: none; color: red;" id="crb-select-duplicate-templates-error"><?php _e( 'Please choose a template', 'crb' ); ?></p>
+				<p style="display: none; color: #ff0000;" id="crb-select-duplicate-templates-error"><?php _e( 'Please choose a template', 'crb' ); ?></p>
 				
 				<script type="text/javascript">
 					$( document ).ready( function() {
