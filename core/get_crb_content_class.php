@@ -14,6 +14,34 @@ class CrbDuplicateCrbContent {
 			return;
 		}
 
+		global $wpdb;
+		$table = $wpdb->posts;
+
+		$sql = "SELECT DISTINCT post_type FROM {$table}";
+
+		$available_post_types = array();
+
+		$banned_post_types = array(
+			'revision',
+			'attachment',
+			'nav_menu_item',
+		);
+
+		if ( empty( $post_types_container = $wpdb->get_results( $sql ) )  ) {
+			$available_post_types = array(
+				'post',
+				'page',
+			);
+		} else {
+			foreach ( $post_types_container as $post_type_container ) {
+				if ( in_array( $post_type_container->post_type, $banned_post_types ) ) {
+					continue;
+				}
+
+				$available_post_types[] = $post_type_container->post_type;
+			}
+		}
+
 		add_meta_box(
 			'crb-content-field',
 			__( 'Copy Content From Post', 'crb' ),
@@ -21,10 +49,7 @@ class CrbDuplicateCrbContent {
 				&$this,
 				'front_end',
 			),
-			array(
-				'post',
-				'page',
-			),
+			$available_post_types,
 			'side',
 			'high'
 		);
